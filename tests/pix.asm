@@ -4,23 +4,8 @@
 .segment "BSS"
 .segment "CODE"
 
-ADC #$00
-LDA #$00
-LDX #$00
-LDY #$00
-CLC
-
 start:
     JMP loop
-
-loop:
-    LDX #$0F     ; Column  = 0 - 1F
-    LDY #$0F     ; Row     = 0 - 1F
-    LDA #$FF     ; Color
-    JSR set_pixel
-
-    JMP loop
-
 
 ; Inputs:
 ;   X = column (0-35)
@@ -45,5 +30,38 @@ set_pixel:
     STA ($02), Y
 
     RTS
+
+loop:
+    ; center
+    LDX #$0F     ; Column  = 0 - 1F
+    LDY #$0F     ; Row     = 0 - 1F
+    LDA #$FF     ; Color
+    JSR set_pixel
+
+    ; tl
+    LDX #$00     ; Column  = 0 - 1F
+    LDY #$00     ; Row     = 0 - 1F
+    LDA #$FF     ; Color
+    JSR set_pixel
+
+    ; tr
+    LDX #$1F     ; Column  = 0 - 1F
+    LDY #$00     ; Row     = 0 - 1F
+    LDA #$FF     ; Color
+    JSR set_pixel
+
+    ; bl
+    LDX #$00     ; Column  = 0 - 1F
+    LDY #$1F     ; Row     = 0 - 1F
+    LDA #$FF     ; Color
+    JSR set_pixel
+
+    ; br
+    LDX #$1F     ; Column  = 0 - 1F
+    LDY #$1F     ; Row     = 0 - 1F
+    LDA #$FF     ; Color
+    JSR set_pixel
+
+    JMP loop
 
 .segment "VECTORS"
