@@ -34,7 +34,8 @@ build: asm
 		src/board.c src/fake6502.c
 
 run:
-	cd ./build/; ./board; open output.png
+	cd ./build/; \
+	./board "./rom.bin"
 
 asm:
 	mkdir -p build
@@ -42,7 +43,7 @@ asm:
 	$(6502ASM) --cpu 6502 \
 		-o build/$(ASM).o \
 		-W1 \
-		tests/$(ASM).asm
+		examples/$(ASM).asm
 #	object to binary file
 #	-t none
 	$(6502LNK) \

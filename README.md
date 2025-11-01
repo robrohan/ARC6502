@@ -2,6 +2,7 @@
 
 If you know, you know. Playing around with 6502 assembly with a pretend board:
 
+- https://www.masswerk.at/6502/6502_instruction_set.html
 - https://en.wikipedia.org/wiki/MOS_Technology_6502
 - https://cc65.github.io/
 - http://6502.org/tutorials/6502opcodes.html
@@ -46,3 +47,4 @@ You need clang installed
 00000030  20 03 80 a2 00 a0 1f a9  ff 20 03 80 a2 1f a0 1f    ........ ......
 00000040  a9 ff 20 03 80 4c 18 80  00 00 00 00 00 00 00 00   .. ..L..........
 ```
+
