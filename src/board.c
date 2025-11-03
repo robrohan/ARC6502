@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     fread(rom, sizeof(rom), 1, ptr);
 
     reset6502();
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 100000; i++)
     {
         step6502();
     }

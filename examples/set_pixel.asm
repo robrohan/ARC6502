@@ -1,22 +1,69 @@
-; Inputs:
-;   X = column (0-35)
-;   Y = row (0-35)
-;   A = color value
-; Clobbers: A, and uses $00/$01 as pointer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 set_pixel:
-    ;                                scratch  ZP 1
-    STX $02           ; Store X (column) into ZP 2
-    STY $03           ; Store Y (row) into    ZP 3
-    STA $04           ; Save color into       ZP 4
+    LDA $DE           ; reset X
+    STA $DA
 
-    LDX #0            ; Clear X register to use for storing the result
+    LDA $DF           ; load video offset
+    ADC $D1           ; add the Y value
+    STA $DB           ; put it in cursor pos
 
-    LDA $03           ; Load Y value
-    ADC #$20          ; video memory starts at $2000
-    STA $03           ; Store result of Y * 32 (screen offset)
-
-    LDY #$00
-    LDA $04           ; reload the color
-    STA ($02), Y
+    LDY $D0           ; load X pos
+    LDA $D4           ; reload the color
+    STA ($DA), Y      ; draw to the video address
 
     RTS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+x1=$D0
+y1=$D1
+x2=$D2
+y2=$D3
+color=$D4
+
+box:
+    ;; x1, y1 the position, top left
+    ;; x2, y1 and how big it is (w,h)
+    LDA $DF         ; reset writing pointer
+    STA $DB
+    LDA $DE
+    STA $DA         ; $2000
+
+    LDA $DB         ; get the drawing pointer
+    ADC y1          ; set counter to
+    ADC y2
+    STA $C1         ; offset + (y1 + y2)
+
+    LDA $DB         ; start drawing y
+    ADC y1
+    STA $DB         ; offset + y1
+
+    LDA x2
+    STA $C0         ; $A + $05 (5)
+
+draw_row:
+    ;;;; draw a row
+    LDA color         ; set the color
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDY x1          ; $DA will have everything
+    STA ($DA), Y    ; 16bit address
+
+    INC $DA
+    LDA $DA
+    ;CMP #$20
+    CMP $C0
+    BNE draw_row
+next_row:
+    LDA #$00
+    STA $DA         ; reset to column 0
+
+    INC $DB         ; increment high byte
+    LDA $DB         ; load high byte
+    CMP $C1        ; compare high byte
+    BNE draw_row
+
+    RTS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
