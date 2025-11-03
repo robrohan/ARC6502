@@ -52,7 +52,6 @@ draw_row:
 
     INC $DA
     LDA $DA
-    ;CMP #$20
     CMP $C0
     BNE draw_row
 next_row:
