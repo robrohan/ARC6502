@@ -20,7 +20,7 @@ loop:
     LDA #$0F
     STA $D0           ; set X
     STA $D1           ; set Y
-    LDA #$06
+    LDA #$F8
     STA $D4           ; set Color
     JSR set_pixel
 
@@ -28,7 +28,7 @@ loop:
     LDA #$00
     STA $D0           ; set X
     STA $D1           ; set Y
-    LDA #$06
+    LDA #$FF
     STA $D4           ; set Color
     JSR set_pixel
 
@@ -37,7 +37,7 @@ loop:
     STA $D0           ; set X
     LDA #$00
     STA $D1           ; set Y
-    LDA #$06
+    LDA #$FF
     STA $D4           ; set Color
     JSR set_pixel
 
@@ -46,7 +46,7 @@ loop:
     STA $D0           ; set X
     LDA #$1F
     STA $D1           ; set Y
-    LDA #$06
+    LDA #$FF
     STA $D4           ; set Color
     JSR set_pixel
 
@@ -54,7 +54,7 @@ loop:
     LDA #$1F
     STA $D0           ; set X
     STA $D1           ; set Y
-    LDA #$06
+    LDA #$FF
     STA $D4           ; set Color
     JSR set_pixel
 
