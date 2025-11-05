@@ -1,17 +1,20 @@
-#include "fake6502.h"
-#include <stdint.h>
-#include <stdio.h>
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "libboard.h"
 
-////////////////////////////
-uint8_t zp[0x0100];
-uint8_t stack[0x0100];
-uint8_t ram[0x2000];
-uint8_t io[0x6000];
-////////////////////////////
-uint8_t rom[0x8000];
-////////////////////////////
+size_t loadROM(uint8_t* ptr)
+{
+    size_t t = (size_t) memcpy(rom, ptr, (size_t)MAX_ROM_SIZE);
+    return t;
+}
+
+uint8_t* runROM(uint16_t max_cycles)
+{
+    reset6502();
+    for (int i = 0; i < max_cycles; i++)
+    {
+        step6502();
+    }
+    return io;
+}
 
 uint8_t read6502(uint16_t address)
 {
@@ -68,34 +71,4 @@ void write6502(uint16_t address, uint8_t value)
         // really, you shouldn't be able to write to ROM
         rom[address - 0x8000] = value;
     }
-}
-
-int main(int argc, char **argv)
-{
-    if (argc < 2)
-    {
-        printf("Missing ROM image\n");
-        return 1;
-    }
-
-    FILE *ptr;
-    ptr = fopen(argv[1], "rb");
-    fread(rom, sizeof(rom), 1, ptr);
-
-    reset6502();
-    for (int i = 0; i < 100000; i++)
-    {
-        step6502();
-    }
-
-    int w = 32;
-    int h = 32;
-    int err = stbi_write_png("output.png", w, h, 1, io, 256);
-    if (err != 1)
-    {
-        printf("Write PNG didn't work %d \n", err);
-        return 1;
-    }
-
-    return 0;
 }

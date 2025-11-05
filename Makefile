@@ -6,7 +6,7 @@ CC=clang
 6502ASM=ca65
 6502LNK=ld65
 
-ASM=2
+ASM=pix
 
 all: clean build
 
@@ -30,7 +30,14 @@ build: asm
 		-I$(PWD)/vendor \
 		-Wall -Wextra -g -v \
 		-o build/board \
-		src/board.c src/fake6502.c
+		src/main.c src/libboard.c src/fake6502.c
+
+lib:
+	$(CC) -std=c99 -fPIC --shared \
+	-I$(PWD)/vendor \
+	-Wall -Wextra -v \
+	-o build/libARC6502.so \
+	src/libboard.c src/fake6502.c
 
 run:
 	cd ./build/; \
