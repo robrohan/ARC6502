@@ -1,9 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 set_pixel:
-    LDA $DE           ; reset X
-    STA $DA
-
     LDA $DF           ; load video offset
     ADC $D1           ; add the Y value
     STA $DB           ; put it in cursor pos
@@ -15,7 +11,18 @@ set_pixel:
     RTS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+read_pixel:
+    LDA $DF           ; load video offset
+    ADC $D1           ; add the Y value
+    STA $DB           ; put it in cursor pos
 
+    LDY $D0           ; load X pos
+    LDA ($DA), Y      ; read the color into the ACC
+    STA $D4           ; store the read color into color
+
+    RTS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 x1=$D0
 y1=$D1
 x2=$D2
@@ -41,7 +48,6 @@ box:
 
     LDA x2
     STA $C0         ; $A + $05 (5)
-
 draw_row:
     ;;;; draw a row
     LDA color         ; set the color
@@ -60,9 +66,11 @@ next_row:
 
     INC $DB         ; increment high byte
     LDA $DB         ; load high byte
-    CMP $C1        ; compare high byte
+    CMP $C1         ; compare high byte
     BNE draw_row
 
+    CLC
+    CLV
     RTS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

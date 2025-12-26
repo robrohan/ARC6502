@@ -6,7 +6,7 @@ CC=clang
 6502ASM=ca65
 6502LNK=ld65
 
-ASM=pix
+ASM=2
 
 all: clean build
 
